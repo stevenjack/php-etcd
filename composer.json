@@ -1,0 +1,15 @@
+{
+    "name": "smaj/php-etcd",
+    "description": "PHP library for using etcd",
+    "license": "Apache License 2.0",
+    "authors": [
+        {
+            "name": "Steven Jack",
+            "email": "stevenmajack@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+
+    }
+}
