@@ -11,7 +11,7 @@ namespace Smaj;
  * This library is used to interact with the etcd library.
  *
  */
-interface RequestAdapterInterface
+interface ClientAdapterInterface
 {
     public function performRequest($uri, $method = 'GET', $data = null);
 }
