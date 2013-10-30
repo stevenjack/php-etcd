@@ -11,7 +11,7 @@ namespace Smaj;
  * This library is used to interact with the etcd library.
  *
  */
-class GuzzleRequest implements \Smaj\RequestAdapterInterface
+class GuzzleClient implements \Smaj\ClientAdapterInterface
 {
     /**
      * Guzzle\Http\Client $clien
