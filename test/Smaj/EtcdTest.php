@@ -5,14 +5,14 @@ use \Smaj;
 class EctdTest extends PHPUnit_Framework_TestCase
 {
     public function testClassExists() {
-        $ectd = new \Smaj\Etcd();
-        $this->assertInstanceOf('\Smaj\Etcd', $ectd);     
+        $etcd = new \Smaj\Etcd();
+        $this->assertInstanceOf('\Smaj\Etcd', $etcd);     
     }
 
     public function testSetServer() {
-        $ectd = new \Smaj\Etcd('127.0.0.1', 4001);
-        $this->assertEquals('127.0.0.1', $ectd->getServer());
-        $this->assertEquals(4001, $ectd->getPort());
+        $etcd = new \Smaj\Etcd('127.0.0.1', 4001);
+        $this->assertEquals('127.0.0.1', $etcd->getServer());
+        $this->assertEquals(4001, $etcd->getPort());
     }
 
     public function testSetAction() {
@@ -36,9 +36,9 @@ class EctdTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($mockRequest);
 
-        $guzzleRequest = new \Smaj\GuzzleRequest($mockClient);
+        $guzzleClient = new \Smaj\GuzzleClient($mockClient);
 
-        $ectd = new \Smaj\Etcd('127.0.0.1', 4001);
+        $etcd = new \Smaj\Etcd('127.0.0.1', 4001);
         $etcd->setClient($guzzleClient);
 
         $response = $etcd->set('testkey', 'test');

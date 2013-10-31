@@ -13,7 +13,10 @@ namespace Smaj;
  */
 class Etcd
 {
-    
+
+    const SET = '';
+    const GET = 'get';
+
     /**
      * @var string
      */
@@ -24,9 +27,21 @@ class Etcd
      */
     protected $port;
 
-    public function __construct($server = '127.0.0.1', $port = 4001) {
+    /**
+     * @var string
+     */
+    protected $version;
+
+    /**
+     * @var \Smaj\ClientAdapterInterface
+     */
+    protected $client;
+
+
+    public function __construct($server = '127.0.0.1', $port = 4001, $version = 'v1') {
         $this->setServer($server);
         $this->setPort($port);
+        $this->setVersion($version);
     }
 
     /**
@@ -44,6 +59,13 @@ class Etcd
     }
 
     /**
+     * @param string $version
+     */
+    public function setVersion($version) {
+        $this->version = $version;
+    }
+
+    /**
      * @return string
      */
     public function getServer() {
@@ -57,5 +79,29 @@ class Etcd
         return $this->port;
     }
 
-    
+    /**
+     * @return string
+     */
+    public function getVersion() {
+        return $this->version;
+    }
+
+    /**
+     * Sets the client to use for connecting the the daemon
+     */
+    public function setClient(\Smaj\ClientAdapterInterface $client)
+    {
+        $this->client = $client;
+    }
+
+    /**
+     * @param \Smaj\Client\Request $request
+     * @return \Smaj\Client\Response
+     */
+    public function send(\Smaj\Client\Request $request)
+    {
+        $this->client->performRequest($request->getUri(), $request->getMethod(), $request->getData());
+    }
+
 }
+
