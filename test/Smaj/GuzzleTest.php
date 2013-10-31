@@ -7,7 +7,7 @@ class GuzzleTest extends PHPUnit_Framework_TestCase
 {
     public function testShouldThrowExceptionWithInvalidMethod() {
         $mockClient = \Mockery::mock('\Guzzle\Http\Client');
-        $guzzleRequest = new \Smaj\GuzzleRequest($mockClient);
+        $guzzleRequest = new \Smaj\GuzzleClient($mockClient);
 
         try {
             $guzzleRequest->performRequest('test', 'PUT');
@@ -38,7 +38,7 @@ class GuzzleTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($mockRequest);
 
-        $guzzleRequest = new \Smaj\GuzzleRequest($mockClient);
+        $guzzleRequest = new \Smaj\GuzzleClient($mockClient);
         $response = $guzzleRequest->performRequest('http://www.example.com/test');
         $this->assertEquals($jsonResponse, $response);
     }

@@ -17,10 +17,17 @@ class Etcd
     const SET = '';
     const GET = 'get';
 
+    const ENDPOINT_URI_STRUCTURE = '%s://%s:%d/%s';
+
     /**
      * @var string
      */
     protected $server;
+
+    /**
+     * @var string
+     */
+    protected $protocol;
 
     /**
      * @var integer
@@ -37,53 +44,68 @@ class Etcd
      */
     protected $client;
 
-
-    public function __construct($server = '127.0.0.1', $port = 4001, $version = 'v1') {
+    public function __construct($server = '127.0.0.1', $port = 4001, $version = 'v1')
+    {
         $this->setServer($server);
         $this->setPort($port);
         $this->setVersion($version);
+        $this->protocol = 'http';
     }
 
     /**
      * @param string $server
      */
-    public function setServer($server) {
+    public function setServer($server)
+    {
         $this->server = $server;
     }
 
     /**
      * @param integer $port
      */
-    public function setPort($port) {
+    public function setPort($port)
+    {
         $this->port = $port;
     }
 
     /**
      * @param string $version
      */
-    public function setVersion($version) {
+    public function setVersion($version)
+    {
         $this->version = $version;
     }
 
     /**
      * @return string
      */
-    public function getServer() {
+    public function getServer()
+    {
         return $this->server;
     }
 
     /**
      * @return integer
      */
-    public function getPort() {
+    public function getPort()
+    {
         return $this->port;
     }
 
     /**
      * @return string
      */
-    public function getVersion() {
+    public function getVersion()
+    {
         return $this->version;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProtocol()
+    {
+        return $this->protocol;
     }
 
     /**
@@ -96,12 +118,24 @@ class Etcd
 
     /**
      * @param \Smaj\Client\Request $request
-     * @return \Smaj\Client\Response
+     * @return false|\Smaj\Client\Response
      */
     public function send(\Smaj\Client\Request $request)
     {
-        $this->client->performRequest($request->getUri(), $request->getMethod(), $request->getData());
+        $request->setEndpoint($this->getEndpoint());
+        $repsonse = $this->client->performRequest($request->getUri(), $request->getMethod(), $request->getData());
+        if ($response) {
+            $request->reset();
+        }
+        return $response;
     }
 
+    /**
+     * @return string
+     */
+    protected function getEndpoint()
+    {
+        return sprintf(self::ENDPOINT_URI_STRUCTURE, $this->getProtocol(), $this->getServer(), $this->getPort(), $this->getVersion());
+    }
 }
 

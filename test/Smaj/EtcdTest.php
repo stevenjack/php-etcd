@@ -6,7 +6,7 @@ class EctdTest extends PHPUnit_Framework_TestCase
 {
     public function testClassExists() {
         $etcd = new \Smaj\Etcd();
-        $this->assertInstanceOf('\Smaj\Etcd', $etcd);     
+        $this->assertInstanceOf('\Smaj\Etcd', $etcd);
     }
 
     public function testSetServer() {
@@ -17,33 +17,48 @@ class EctdTest extends PHPUnit_Framework_TestCase
 
     public function testSetAction() {
         $jsonResponse = '{"action":"SET","key":"/testkey","value":"test","newKey":true,"index":8}';
-        
-        $mockResponse = \Mockery::mock('\Guzzle\Http\Message\Response');
-        $mockResponse
-            ->shouldReceive('json')
-            ->once()
-            ->andReturn($jsonResponse);
 
-        $mockRequest = \Mockery::mock('\Guzzle\Http\Message\Request');
-        $mockRequest
-            ->shouldReceive('send')
+        $mockResponse = \Mockery::mock('\Smaj\Client\Response');
+
+        $guzzleClient = \Mockery::mock('\Smaj\GuzzleClient');
+        $guzzleClient
+            ->shouldReceive('performRequest')
             ->once()
             ->andReturn($mockResponse);
-
-        $mockClient = \Mockery::mock('\Guzzle\Http\Client');
-        $mockClient
-            ->shouldReceive('post')
-            ->once()
-            ->andReturn($mockRequest);
-
-        $guzzleClient = new \Smaj\GuzzleClient($mockClient);
 
         $etcd = new \Smaj\Etcd('127.0.0.1', 4001);
         $etcd->setClient($guzzleClient);
 
-        $response = $etcd->set('testkey', 'test');
+        $mockRequest = \Mockery::mock('\Smaj\Client\Request');
 
-        $this->assertInstanceOf('\Smaj\Response', $response);
+        $mockRequest
+            ->shouldReceive('setKey')
+            ->once();
+
+        $mockRequest
+            ->shouldReceive('setValue')
+            ->once();
+
+        $mockRequest
+            ->shouldReceive('getUri')
+            ->once();
+
+        $mockRequest
+            ->shouldReceive('getMethod')
+            ->once();
+
+        $mockRequest
+            ->shouldReceive('getData')
+            ->once();
+
+        $mockRequest
+            ->shouldReceive('setEndpoint')
+            ->with('http://127.0.0.1:4001/v1')
+            ->once();
+
+        $response = $etcd->send($mockRequest);
+
+        $this->assertInstanceOf('\Smaj\Client\Response', $response);
         $this->assertEquals('testkey', $response->getKey());
         $this->assertEquals('test', $response->getValue());
 

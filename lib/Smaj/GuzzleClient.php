@@ -14,13 +14,13 @@ namespace Smaj;
 class GuzzleClient implements \Smaj\ClientAdapterInterface
 {
     /**
-     * Guzzle\Http\Client $clien
+     * Guzzle\Http\Client $client
      */
     protected $client;
 
     protected $allowedMethods = array('GET', 'POST');
 
-    public function __construct(\Guzzle\Http\Client $client) 
+    public function __construct(\Guzzle\Http\Client $client)
     {
         $this->setClient($client);
     }
@@ -30,7 +30,7 @@ class GuzzleClient implements \Smaj\ClientAdapterInterface
         $this->client = $client;
     }
 
-    public function getClient() 
+    public function getClient()
     {
         return $this->client;
     }
@@ -51,7 +51,7 @@ class GuzzleClient implements \Smaj\ClientAdapterInterface
                     $request->$this->client->post($uri, null, $data);
                     break;
             }
-            
+
             $response = $request->send();
             return $response->json();
         }
