@@ -19,6 +19,15 @@ class EctdTest extends PHPUnit_Framework_TestCase
         $jsonResponse = '{"action":"SET","key":"/testkey","value":"test","newKey":true,"index":8}';
 
         $mockResponse = \Mockery::mock('\Smaj\Client\Response');
+        $mockResponse
+            ->shouldReceive('getKey')
+            ->once()
+            ->andReturn('testkey');
+
+        $mockResponse
+            ->shouldReceive('getValue')
+            ->once()
+            ->andReturn('test');
 
         $guzzleClient = \Mockery::mock('\Smaj\GuzzleClient');
         $guzzleClient
@@ -54,6 +63,10 @@ class EctdTest extends PHPUnit_Framework_TestCase
         $mockRequest
             ->shouldReceive('setEndpoint')
             ->with('http://127.0.0.1:4001/v1')
+            ->once();
+
+        $mockRequest
+            ->shouldReceive('reset')
             ->once();
 
         $response = $etcd->send($mockRequest);

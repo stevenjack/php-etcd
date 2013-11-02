@@ -1,0 +1,9 @@
+{
+  "name": "php-etcd",
+  "description": "PHP library for etcd, uses robohydra for mocking etcd API",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "robohydra": "0.3.0"
+  }
+}

@@ -123,7 +123,7 @@ class Etcd
     public function send(\Smaj\Client\Request $request)
     {
         $request->setEndpoint($this->getEndpoint());
-        $repsonse = $this->client->performRequest($request->getUri(), $request->getMethod(), $request->getData());
+        $response = $this->client->performRequest($request->getUri(), $request->getMethod(), $request->getData());
         if ($response) {
             $request->reset();
         }
